@@ -32,7 +32,7 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
         }
     }
 
-    if (${CACHE} == "no") {
+    if ("${CACHE}" == "no") {
         echo "Building image with cache..."
         sh """
             docker build --no-cache -t ${ECR}${NAME}.${y} -t ${ECR}${NAME}  -f ${DOCKERFILE} .

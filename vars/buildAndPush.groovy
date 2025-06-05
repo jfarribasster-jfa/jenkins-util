@@ -31,3 +31,4 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
             error "La versión actual (${currentVersion}) no es un número válido."
         }
     }
+}

@@ -9,7 +9,7 @@
     * - NAME: Docker image name to build and push, in the format 'repository:version'.
     * - CACHE: Whatevewr to reuse cache or not.
 */
-def call(String ECR, String DOCKERFILE, String NAME, Strin CACHE) {
+def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     
     repository = NAME.split(':')[0]
     version = NAME.split(':')[1]

@@ -15,7 +15,7 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     version = NAME.split(':')[1]
 
     // getting current las t version
-    def currentVersion = sh(script: "aws ecr describe-images --repository-name ${repository} --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text", returnStdout: true).trim()
+    def currentVersion = sh(script: "aws ecr describe-images --repository-name ${repository} --region us-east-1 --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text", returnStdout: true).trim()
     echo "Current version in ECR: ${currentVersion}"
     // If the current version is not the same as the one provided, we update the version    
     if (currentVersion == "") {

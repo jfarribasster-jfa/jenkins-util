@@ -18,10 +18,16 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     def currentVersion = sh(script: "aws ecr describe-images --repository-name tfm/${repository} --region us-east-1 --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text", returnStdout: true).trim()
     echo "Current version in ECR: ${currentVersion}"
     // If the current version is not the same as the one provided, we update the version    
-    if (currentVersion == "") {
+
+    echo "Current version in ECR: ${currentVersion}"
+    // Determinar nueva versión
+    def y
+    if (!currentVersion || currentVersion == "None") {
         y = 0
     } else {
-        y = currentVersion.toInteger() + 1
+        try {
+            y = currentVersion.toInteger() + 1
+        } catch (Exception e) {
+            error "La versión actual (${currentVersion}) no es un número válido."
+        }
     }
-    echo "New version to be pushed: ${y}"
-}

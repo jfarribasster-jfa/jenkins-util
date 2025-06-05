@@ -14,8 +14,6 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     repository = NAME.split(':')[0]
     version = NAME.split(':')[1]
            
-    echo "Iniciando sesión en ECR..."
-    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR}${repository}"
     // getting current las t version
     def currentVersion = sh(script: "aws ecr describe-images --repository-name ${repository} --region us-east-1 --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text", returnStdout: true).trim()
     echo "Current version in ECR: ${currentVersion}"

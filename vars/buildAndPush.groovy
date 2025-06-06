@@ -13,7 +13,7 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     
     repository = NAME.split(':')[0]
     version = NAME.split(':')[1]
-           
+    def dockerConfig = '/tmp/.docker'       
     // getting current las t version
     def currentVersion = sh(script: "aws ecr describe-images --repository-name tfm/${repository} --region us-east-1 --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text", returnStdout: true).trim()
     echo "Current version in ECR: ${currentVersion}"
@@ -46,6 +46,11 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
     // Pushing the image to ECR
     echo "Pushing image ${ECR}${NAME}.${y} to ECR..."
     sh """
+        export DOCKER_CONFIG=${dockerConfig}
+        mkdir -p \$DOCKER_CONFIG
+        echo "Iniciando sesión en ECR..."
+        aws sts get-caller-identity 
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR}${repository}
         docker push ${ECR}${NAME}.${y}
         docker push ${ECR}${NAME}
     """              

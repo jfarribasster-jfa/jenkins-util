@@ -43,4 +43,11 @@ def call(String ECR, String DOCKERFILE, String NAME, String CACHE) {
             docker build -t ${ECR}${NAME}.${y} -t ${ECR}${NAME}  -f ${DOCKERFILE} .
         """
     }
+    // Pushing the image to ECR
+    echo "Pushing image ${ECR}${NAME}.${y} to ECR..."
+    sh """
+        docker push ${ECR}${NAME}.${y}
+        docker push ${ECR}${NAME}
+    """              
+
 }
